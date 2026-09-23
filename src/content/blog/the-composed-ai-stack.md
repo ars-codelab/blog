@@ -59,6 +59,8 @@ To make this architecture concrete, consider an inbound seller escalation on a m
 
 A keyword system fires a generic form. A monolithic LLM spends three seconds generating an expensive response. A composed architecture distributes the work across specialized layers:
 
+![The Composed Enterprise AI Stack](/images/composed-ai-stack-architecture.png)
+
 ```
 Inbound Support Ticket
          │

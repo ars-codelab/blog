@@ -1,0 +1,229 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Anoj Sundar",
+  description = "Reflections, engineering, AI, and systems by Anoj Sundar."
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title="Anoj Sundar's Blog" href="/rss.xml" />
+    <title>{title === "Anoj Sundar" ? title : `${title} · Anoj Sundar`}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <style is:global>
+      :root {
+        --bg: #fafafa;
+        --card-bg: #ffffff;
+        --text: #1a1a1a;
+        --text-muted: #666666;
+        --border: #e5e5e5;
+        --accent: #0f172a;
+        --accent-hover: #3b82f6;
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #09090b;
+          --card-bg: #141416;
+          --text: #ededed;
+          --text-muted: #a1a1aa;
+          --border: #27272a;
+          --accent: #f4f4f5;
+          --accent-hover: #60a5fa;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.65;
+        letter-spacing: -0.01em;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4rem;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 2rem;
+        margin-bottom: 2.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      header .brand a {
+        font-weight: 700;
+        font-size: 1.25rem;
+        text-decoration: none;
+        color: var(--text);
+        letter-spacing: -0.02em;
+      }
+
+      header nav {
+        display: flex;
+        gap: 1.25rem;
+        align-items: center;
+      }
+
+      header nav a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: color 0.15s ease;
+      }
+
+      header nav a:hover {
+        color: var(--text);
+      }
+
+      footer {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      footer a {
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        color: var(--text);
+      }
+
+      /* Article Markdown Styling */
+      .prose {
+        font-size: 1.0625rem;
+        line-height: 1.75;
+      }
+
+      .prose h1, .prose h2, .prose h3, .prose h4 {
+        color: var(--text);
+        font-weight: 700;
+        line-height: 1.3;
+        margin-top: 2.25rem;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.02em;
+      }
+
+      .prose h1 { font-size: 1.85rem; }
+      .prose h2 { font-size: 1.45rem; }
+      .prose h3 { font-size: 1.2rem; }
+
+      .prose p {
+        margin-bottom: 1.25rem;
+      }
+
+      .prose ul, .prose ol {
+        margin-bottom: 1.25rem;
+        padding-left: 1.5rem;
+      }
+
+      .prose li {
+        margin-bottom: 0.35rem;
+      }
+
+      .prose blockquote {
+        border-left: 3px solid var(--border);
+        padding-left: 1.25rem;
+        font-style: italic;
+        color: var(--text-muted);
+        margin: 1.5rem 0;
+      }
+
+      .prose pre {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        padding: 1rem 1.25rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        margin: 1.5rem 0;
+      }
+
+      .prose code:not(pre code) {
+        font-family: var(--font-mono);
+        font-size: 0.88em;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        padding: 0.15em 0.35em;
+        border-radius: 4px;
+      }
+
+      .prose a {
+        color: var(--accent-hover);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .prose hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2.5rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="brand">
+          <a href="/">Anoj Sundar</a>
+        </div>
+        <nav>
+          <a href="/">Writing</a>
+          <a href="/about">About</a>
+          <a href="/rss.xml" aria-label="RSS Feed">RSS</a>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer>
+        <p>© {new Date().getFullYear()} Anoj Sundar</p>
+        <p><a href="https://github.com/ars-codelab" target="_blank" rel="noreferrer">GitHub</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

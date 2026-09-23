@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+---
+
+<BaseLayout>
+  <section class="intro">
+    <p class="tagline">
+      Notes, essays, and technical dispatches on engineering, AI systems, and building products.
+    </p>
+  </section>
+
+  <section class="posts">
+    <h2>Dispatches</h2>
+    {posts.length === 0 ? (
+      <p class="empty">No posts published yet.</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li class="post-item">
+            <a href={`/posts/${post.id}`} class="post-link">
+              <span class="post-title">{post.data.title}</span>
+              <time datetime={post.data.pubDate.toISOString()}>
+                {formatDate(post.data.pubDate)}
+              </time>
+            </a>
+            {post.data.description && (
+              <p class="post-desc">{post.data.description}</p>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    margin-bottom: 3rem;
+  }
+  .tagline {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  h2 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+  .empty {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+  .post-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .post-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .post-title {
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: color 0.15s ease;
+  }
+  .post-link:hover .post-title {
+    color: var(--accent-hover);
+  }
+  time {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .post-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+</style>

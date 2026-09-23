@@ -1,12 +1,12 @@
 ---
 title: "The Composed AI Stack: Why Purpose-Built Models Like Jev Matter"
-description: "An executive framework and technical benchmark on moving from monolithic LLMs to composed AI pipelines for enterprise triage and decision-making."
+description: "An framework and technical benchmark on moving from monolithic LLM based architecture to composed AI pipelines for enterprise triage and decision-making."
 pubDate: 2026-09-23
 tags: ["ai", "enterprise", "architecture", "machine-learning", "japan"]
 draft: false
 ---
 
-## Executive Summary for CXOs
+## Executive Summary
 
 For the past three years, enterprise AI roadmaps have been dominated by a single objective: standardizing on a frontier foundation model. Whether choosing OpenAI, Google, or Anthropic, organizations attempted to route every prompt, customer query, internal classification, and triage pipeline through the same general-purpose generative engine.
 
@@ -35,7 +35,7 @@ By composing these components, enterprises can reduce token expenditure by 70% t
 
 ## Part I: The Architecture Dilemma in Production
 
-If you run an e-commerce platform with hundreds of thousands of merchants and customers, your support queue is where architecture meets operational reality. Every single morning, thousands of inbound tickets arrive. Human review for every message is impossible. Volume is too high, SLAs are tight, and labor costs would erode operating margins.
+Let's take an example of an e-commerce platform with hundreds of thousands of merchants and customers, your support queue is where architecture meets operational reality. Every single morning, thousands of inbound tickets arrive. Human review for every message is impossible. Volume is too high, SLAs are tight, and labor costs would erode operating margins.
 
 Historically, organizations adopted one of two extremes.
 
@@ -68,7 +68,7 @@ Inbound Support Ticket
   • Deterministic database query (0ms AI inference cost)
          │
          ▼
-[ Layer 2: Fast Semantic Classifier (TypeSafe Jev) ]
+[ Layer 2: Fast Semantic Classifier (System 1 decision model like TypeSafe Jev) ]
   • Intent: Account Reinstatement (93% confidence)
   • Tone: Distressed (87% confidence)
   • Urgency: P1 (91% confidence)
@@ -97,8 +97,8 @@ Inbound Support Ticket
 
 In this pipeline:
 - **Zero AI cost is incurred on basic facts.** The CRM pulls historical context deterministically.
-- **Jev handles semantic evaluation in a single forward pass.** In 280 milliseconds, it classifies intent, distress, and urgency without generating an unnecessary conversational response.
-- **Expensive models are gated.** The churn model runs only when Jev flags high distress. The generative LLM runs only on the 5% of cases that warrant customized correspondence.
+- **A system 1 general purpose classification model like Jev handles semantic evaluation in a single forward pass.** In 280 milliseconds, it classifies intent, distress, and urgency without generating an unnecessary conversational response.
+- **Expensive models are gated.** The churn model runs only when system 1 model flags high distress. The generative LLM runs only on the 5% of cases that warrant customized correspondence.
 - **Human judgment is concentrated where it matters.** The specialist does not spend time reading routine tickets; they spend their day resolving critical merchant relationships with complete situational awareness.
 
 ---

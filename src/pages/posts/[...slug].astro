@@ -39,6 +39,11 @@ function formatDate(date: Date) {
       {post.data.description && (
         <p class="lead">{post.data.description}</p>
       )}
+      {post.data.originalUrl && (
+        <p class="original-link">
+          Originally published on <a href={post.data.originalUrl} target="_blank" rel="noopener noreferrer">external source ↗</a>
+        </p>
+      )}
     </header>
 
     <div class="content">
@@ -83,7 +88,13 @@ function formatDate(date: Date) {
     font-size: 1.15rem;
     color: var(--text-muted);
     line-height: 1.6;
-    margin-bottom: 0;
+    margin-bottom: 0.75rem;
+  }
+  .original-link {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.5rem;
   }
   .content {
     margin-bottom: 3rem;

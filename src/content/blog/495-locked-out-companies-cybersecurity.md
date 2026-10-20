@@ -12,7 +12,7 @@ On October 5, Monogatari Corporation said [10.79 million member records from its
 
 I'm not a security expert. I work in product and data, and like a lot of leaders I'm trying to learn this domain well enough to protect the systems and customers that leaders like us are responsible for. These incidents are a reminder that no company is exempt. Every organization in this article was the victim of a crime, and I'm reading these cases to learn from them, not to judge. Any company that holds customer data at this scale faces the same risks, including the one I work for.
 
-This article is written for executives in the same position: accountable for the outcome, without the background to judge whether the answers they get from technical teams and vendors are good ones. I'll start with the numbers, then cover what is known about how these attacks happen, and then where I would begin with older systems that can't simply be replaced.
+This article is written for executives in the same position: accountable for the outcome, without a security background to judge whether the answers they get from technical teams and vendors are good ones. I'll start with the numbers, then cover what is known about how these attacks happen, and then where I would begin with older systems that can't simply be replaced.
 
 ## The numbers behind the headlines
 
@@ -52,34 +52,68 @@ Vendors are the other recurring thread. [LINE Yahoo](https://www.japantimes.co.j
 
 ## Where I would start with legacy systems
 
-You can't replace a legacy system in a quarter, and most of us can't judge a firewall configuration. What we can do is ask questions that have checkable answers, and notice when the answers are vague. These are the eight questions I'd ask, with a rough sense of what a good answer sounds like. I'd treat the technical details as a starting point for the CISO, not as instructions.
+You can't replace a legacy system in a quarter, and most of us can't judge a firewall configuration. What we can do is ask questions that have checkable answers, and notice when the answers are vague. These are the nine questions I'd ask, in the order an attack unfolds, with a rough sense of what a good answer sounds like. I'd treat the technical details as a starting point for the CISO, not as instructions.
 
-1. **What is reachable from the internet?** Ask for a written list of VPNs, remote-access tools, admin panels, mobile app servers and old test environments. If no one can produce it within a week, that is the first finding.
-2. **Who updates the front-door equipment, and by when?** Each VPN or remote-access device should have a named owner and a deadline measured in days for serious fixes. Where a legacy system can't be patched, the answer should be to isolate it so that a break-in doesn't spread, or to set a retirement date. Administrator and remote-access logins should also need more than a password, ideally a hardware security key, since texted codes and simple phone prompts can be talked out of people.
-3. **If everything in the main environment were encrypted tonight, what could be restored?** IDC Frontier's customers are the case study. A good answer has three parts.
-   - **Separation.** Copies sit outside the provider and outside the administrator accounts an attacker would take over. On AWS that means a separate account with its own logins and MFA, since attackers who take over administrator credentials delete backups held in the same account. A second region (Osaka, if the primary is in Tokyo) also protects against an outage or disaster.
-   - **Protection.** At least one copy can't be changed or deleted, even by administrators, using a locked backup vault with a set retention date. The common 3-2-1 rule (three copies, two types of storage, one off-site) is the baseline. Backups also need encryption, keys under separate control and a log of who reads them, because locking a copy protects against deletion, not theft.
-   - **Proof.** Someone restores from the backup on a schedule and times it, because a backup nobody has restored is a guess.
-4. **Does the server check who owns each record?** For any mobile app or website that has accounts, ask whether the server verifies that the logged-in user is allowed to see the specific record requested, and whether an outside party has tested that. The question sounds technical, but a clear yes or no is an easy thing to ask for.
-5. **What customer data is being kept that isn't needed?** BK Japan's decision not to hold card numbers is the model. Apply it to everything else: birth dates, phone numbers, accounts nobody has used in years. Ask for a retention rule for each kind of data and evidence that it's enforced.
-6. **What do vendor contracts require?** Look for fix deadlines for serious vulnerabilities, a right to audit, a duty to notify the company quickly when they're breached, and logs kept somewhere the vendor can't erase. Ask for the same obligations to pass down to subcontractors. If the contract is silent, the company is relying on goodwill. A contract only decides who pays and who must notify whom afterwards, so the next two questions cover the controls a company holds itself.
-7. **Who holds the keys when vendors work in the company's systems?** Many companies rely on outside teams to build apps, run data platforms and maintain pipelines, often with access to large amounts of customer data. From what I've read, the controls that prevent problems are the ones the company holds itself.
-   - **Ownership.** The company owns the cloud accounts, code repositories, app store listings, signing keys and data platform, with vendors working inside them instead of holding copies. A company that can't change vendors without their cooperation doesn't control the system.
-   - **Named access.** Each vendor employee has a named login through the company's identity system with its MFA, access that is granted per task and expires, and no shared accounts.
-   - **Less data.** Developers rarely need real customer data, so masked or sample data for development and testing limits what a bad employee or a breach can reach.
-   - **Own logs.** The company keeps the access logs itself, somewhere the vendor can't delete them, with alerts for bulk exports and odd-hours access.
-8. **What happens when someone leaves?** Single sign-on with separate roles per system is easier to shut off than a separate password for every system, because one action on someone's last day closes access everywhere.
-   - Account shutdown is triggered by the HR exit process and done the same day.
-   - Privileged access is reviewed quarterly, with each system owner signing off.
-   - Vendors report their leavers, or their logins expire every 90 days unless renewed.
-   - Service accounts and API keys tend to outlive everyone, so each needs an owner and a rotation schedule.
-   - Each quarter, a few recent leavers are checked to confirm their access is really gone.
+[![Cyber Resilience Checklist: The nine questions and the people layer on one page](/images/cyber-resilience-checklist.png)](/images/cyber-resilience-checklist.png)
 
-One more item that isn't a question about technology. Ask who has the authority to declare an incident, and run a drill. Reports to the [Personal Information Protection Commission](https://www.ppc.go.jp/en/) are time-bound, and your lawyers should walk you through the exact deadlines, since I'm not the right source for that.
+*The nine questions and the people layer on one page, as a checklist for a board meeting. ([Open interactive HTML version](/posters/cyber-resilience-checklist.html))*
+
+### Keep them out
+
+**1. What is exposed to the internet?** Ask for a written list of VPNs, remote-access tools, admin panels, mobile app servers and old test environments. If no one can produce it within a week, that is the first finding.
+
+**2. Are VPNs and remote access patched, with MFA?** Each VPN or remote-access device should have a named owner and a deadline measured in days for serious fixes. Where a legacy system can't be patched, the answer should be to isolate it so that a break-in doesn't spread, or to set a retirement date. Administrator and remote-access logins should also need more than a password, ideally a hardware security key, since texted codes and simple phone prompts can be talked out of people.
+
+**3. Does the server enforce authorization?** For any mobile app or website that has accounts, ask whether the server verifies that the logged-in user is allowed to see the specific record requested (the [broken object level authorization](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/) flaw described earlier), and whether an outside party has tested that. The question sounds technical, but a clear yes or no is an easy thing to ask for.
+
+### Limit the damage
+
+**4. Why is this data still retained?** BK Japan's decision not to hold card numbers is the model. Apply it to everything else: birth dates, phone numbers, accounts nobody has used in years. Ask for a retention policy for each kind of data and evidence that it's enforced.
+
+**5. Who has privileged access, and who owns the accounts?** Many companies rely on outside teams to build apps, run data platforms and maintain pipelines, often with access to large amounts of customer data. In the contract, look for patch deadlines for serious vulnerabilities, a right to audit, a duty to notify the company quickly when they're breached, and the same obligations passed down to subcontractors. If the contract is silent, the company is relying on goodwill, and even a good contract only decides who pays and who must notify whom afterwards. From what I've read, the controls that prevent problems are the ones the company holds itself.
+
+- **Ownership.** The company owns the cloud accounts, code repositories, app store listings, signing keys and data platform, with vendors working inside them instead of holding copies. A company that can't change vendors without their cooperation doesn't control the system.
+- **Named access.** Each vendor employee has a named login through the company's identity system with its MFA, access that is granted per task and expires, and no shared accounts.
+- **Less data.** Developers rarely need real customer data, so masked or sample data for development and testing limits what a bad employee or a breach can reach.
+- **Own logs.** The company keeps the access logs itself, somewhere the vendor can't delete them, with alerts for bulk exports and odd-hours access.
+
+**6. Is access revoked when people leave?** Single sign-on with separate roles per system is easier to shut off than a separate password for every system, because one action on someone's last day closes access everywhere.
+
+- Account shutdown is triggered by the HR exit process and done the same day.
+- Privileged access is reviewed quarterly, with each system owner signing off.
+- Vendors report their leavers, or their logins expire every 90 days unless renewed.
+- Service accounts and API keys tend to outlive everyone, so each needs an owner and a rotation schedule.
+- Each quarter, a few recent leavers are checked to confirm their access is really gone.
+
+### Recover and tell
+
+**7. If everything in the main environment were encrypted tonight, what could be restored?** [IDC Frontier](https://vpsranking.com/news/cloud/cloud-2026-10-08-idcf-cloud-ransomware-recovery/)'s customers are the case study. A good answer has three parts.
+
+- **Separation.** Copies sit outside the provider and outside the administrator accounts an attacker would take over. On AWS that means a separate account with its own logins and MFA, since attackers who take over administrator credentials delete backups held in the same account. A second region (Osaka, if the primary is in Tokyo) also protects against an outage or disaster.
+- **Protection.** At least one copy can't be changed or deleted, even by administrators, using a locked backup vault with a set retention date. The common 3-2-1 rule (three copies, two types of storage, one off-site) is the baseline. Backups also need encryption, keys under separate control and a log of who reads them, because locking a copy protects against deletion, not theft.
+- **Proof.** Someone restores from the backup on a schedule and times it, because a backup nobody has restored is a guess.
+
+**8. Who declares an incident?** A named person should have the authority to call it, and the company should have run a drill. Reports to the [Personal Information Protection Commission](https://www.ppc.go.jp/en/) are time-bound, and your lawyers should walk you through the exact deadlines, since I'm not the right source for that.
+
+**9. What will customers be told?** Decide before an incident what the company never asks for, where customers should go for official information, and how they can report a fake message. The section on protecting customers, after the launch gate, covers this in more detail.
+
+## People will click, plug in and sign up
+
+The nine questions are about systems, but people are part of every system. Staff open email attachments, plug in USB drives and sign up for tools nobody approved, usually while trying to get their work done. To be clear about what the sources say, the incidents above were mostly traced to exposed equipment and application flaws, and none of them was publicly attributed to a phishing email or a USB stick. These habits are still among the most common ways in, which is why they belong on the list.
+
+I think of it as two jobs. Training reduces how often a mistake happens. Built-in protection limits what one mistake can do. Training alone won't hold, because someone will eventually be tired or rushed, so each risk below has both.
+
+- **Email links and attachments.** Train people to report suspicious messages without fear of blame, and run regular simulated phishing so reporting becomes a habit. Build in filtering for links and attachments, MFA that resists phishing (security keys or passkeys), and limited permissions so a stolen login can't reach everything.
+- **USB and other external devices.** Train people to treat found or gifted drives as unsafe. Build in controls that block or restrict removable storage on company devices, and scan anything that is allowed in.
+- **Unapproved apps and AI tools.** Train people on what may not be pasted into public tools, such as customer data or source code. Build in an approved list of tools that are easy to get, so people don't go looking elsewhere, plus data loss prevention and monitoring for unknown apps and AI services connected to company accounts.
+
+The approved-tools point matters more than it looks. If the sanctioned route is slow, people will find a faster one, and that is how shadow IT grows. A short, fast approval path does more than a stern policy.
+
+Ask for both halves of the answer. If a leader hears only about training, nothing limits the damage from the next mistake. If they hear only about technical controls, staff will work around them.
 
 ## Make security and recovery a gate before launch
 
-The eight questions fix what exists today. Left alone, new systems will recreate the same problems, so it makes sense to also change how new things get released. Before any app, data pipeline or service goes live, it should pass a short gate that covers security guardrails and business continuity, and the gate should apply equally to what internal teams build and what vendors deliver. A project that fails the gate doesn't launch until it passes or an executive signs off on the exception in writing.
+The nine questions fix what exists today. Left alone, new systems will recreate the same problems, so it makes sense to also change how new things get released. Before any app, data pipeline or service goes live, it should pass a short gate that covers security guardrails and business continuity, and the gate should apply equally to what internal teams build and what vendors deliver. A project that fails the gate doesn't launch until it passes or an executive signs off on the exception in writing.
 
 The gate doesn't need to be heavy, and it shouldn't be, because teams will route around a process that slows every release. The part a machine can check should be automated and run on every release. I'd start with these:
 
@@ -88,7 +122,7 @@ The gate doesn't need to be heavy, and it shouldn't be, because teams will route
 - MFA enforced on administrator and vendor logins, and logging switched on.
 - Encryption enabled, and backups configured in a separate account.
 
-Non-technical companies can use AI to help with the automated side. Tools that scan for assets exposed to the internet and run automated tests against apps and APIs are within reach now, and AI-assisted code review can add to them. My understanding is that automated tools are weakest on the flaw behind app-to-backend attacks, where the server doesn't check who owns a record, because that depends on how the business works. I'd run a small pilot against a human penetration test before relying on it, get written permission before testing anything a vendor hosts, and keep source code and customer data out of public AI tools. I'm not certain how the newest tools compare with human testers.
+Companies without a large security team can use AI to help with the automated side. Tools that scan for internet-exposed assets and test apps and APIs are within reach now, and AI-assisted code review can add to them. As far as I understand, automated tools are weakest on authorization flaws like the one in question 3, because those depend on how the business works, so I'd pilot one against a human penetration test before relying on it. Get written permission before testing anything a vendor hosts, and keep source code and customer data out of public AI tools.
 
 The rest needs a person, so it's a semi-manual review with evidence attached:
 

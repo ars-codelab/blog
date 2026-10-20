@@ -1,0 +1,412 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Cyber Resilience Checklist</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
+<style>
+/* Layout: one poster sheet. Three stages of an attack left to right (keep them out, limit the damage,
+   recover), a people layer underneath that runs across all three, then a launch gate bar. Stacks on phones.
+   Deliberately a single light look so the text stays dark on light in any viewer theme. */
+:root {
+  color-scheme: light;
+
+  --ground: #E8E2D6;
+  --bg: #F7F3EB;
+  --line: #DDD5C7;
+  --ink: #201B17;
+  --muted: #564D44;
+  --accent: #A24B2A;
+  --tag-fg: #FFFFFF;
+
+  --a-bg: #F4E8E1;
+  --a-line: #E5D2C7;
+  --a-card: #FFFFFF;
+  --a-chip-bg: #F3E2D9;
+  --a-chip-fg: #8A3E20;
+
+  --b-bg: #FFFFFF;
+  --b-line: #E3DCCF;
+  --blue-card: #EEF2F9;
+  --blue-line: #D9E1F0;
+  --blue-chip-bg: #DCE5F6;
+  --blue-chip-fg: #2F4C80;
+  --lilac-card: #F3EEF9;
+  --lilac-line: #E3DAF0;
+  --lilac-chip-bg: #E6DCF4;
+  --lilac-chip-fg: #5A3C86;
+
+  --c-bg: #E7EFE4;
+  --c-line: #CFDCCB;
+  --c-card: #FFFFFF;
+  --c-card-line: #D3E0CF;
+  --c-chip-bg: #D6E6D1;
+  --c-chip-fg: #2E5A2A;
+  --c-label: #3A6735;
+
+  --gate-bg: #EFE7D6;
+  --gate-line: #E0D5BE;
+
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px;
+}
+
+.sheet {
+  max-width: 1080px;
+  margin: 0 auto;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(20px, 4vw, 40px);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(30px, 5.4vw, 54px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 10px 0 16px;
+  max-width: 17ch;
+  text-wrap: balance;
+}
+.rule {
+  width: 64px;
+  height: 3px;
+  background: var(--accent);
+  margin: 0 0 18px;
+}
+.lede {
+  margin: 0 0 26px;
+  max-width: 62ch;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.col {
+  min-width: 0;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid transparent;
+}
+.col-a { background: var(--a-bg); border-color: var(--a-line); }
+.col-b { background: var(--b-bg); border-color: var(--b-line); }
+.col-c { background: var(--c-bg); border-color: var(--c-line); }
+
+.label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.col-c .label { color: var(--c-label); }
+
+.col h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(22px, 2.5vw, 28px);
+  line-height: 1.12;
+  margin: 6px 0 16px;
+  text-wrap: balance;
+}
+.col h2 u {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+
+.stack { display: grid; gap: 10px; }
+
+.card {
+  min-width: 0;
+  border-radius: 12px;
+  padding: 12px 14px 14px;
+  border: 1px solid var(--card-line, transparent);
+  background: var(--card-bg, transparent);
+}
+.card h3 {
+  font-size: 15.5px;
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 8px 0 4px;
+}
+.card p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.k {
+  margin-right: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-variant-numeric: tabular-nums;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+}
+
+.col-a .card {
+  --card-bg: var(--a-card);
+  --card-line: var(--a-line);
+  --chip-bg: var(--a-chip-bg);
+  --chip-fg: var(--a-chip-fg);
+}
+.col-b .card:nth-child(odd) {
+  --card-bg: var(--blue-card);
+  --card-line: var(--blue-line);
+  --chip-bg: var(--blue-chip-bg);
+  --chip-fg: var(--blue-chip-fg);
+}
+.col-b .card:nth-child(even) {
+  --card-bg: var(--lilac-card);
+  --card-line: var(--lilac-line);
+  --chip-bg: var(--lilac-chip-bg);
+  --chip-fg: var(--lilac-chip-fg);
+}
+.col-c .card {
+  --card-bg: var(--c-card);
+  --card-line: var(--c-card-line);
+  --chip-bg: var(--c-chip-bg);
+  --chip-fg: var(--c-chip-fg);
+}
+
+.people {
+  margin-top: 16px;
+  border-radius: 16px;
+  padding: 18px;
+  background: var(--b-bg);
+  border: 1px solid var(--b-line);
+}
+.people h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.15;
+  margin: 6px 0 16px;
+  text-wrap: balance;
+}
+.risks {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 900px) {
+  .risks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.risk {
+  min-width: 0;
+  border-radius: 12px;
+  padding: 12px 14px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.risk h3 {
+  font-size: 15.5px;
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+.risk dl { margin: 0; display: grid; gap: 10px; }
+.row { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px; align-items: start; }
+.row dt {
+  justify-self: start;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 6px;
+  border-radius: 5px;
+}
+.row dd { margin: 0; font-size: 13.5px; color: var(--muted); }
+.t-train { background: var(--blue-chip-bg); color: var(--blue-chip-fg); }
+.t-build { background: var(--lilac-chip-bg); color: var(--lilac-chip-fg); }
+.people-foot {
+  margin: 14px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.gate {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  background: var(--gate-bg);
+  border: 1px solid var(--gate-line);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+.gate-tag {
+  background: var(--accent);
+  color: var(--tag-fg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.gate p { margin: 0; flex: 1 1 320px; min-width: 0; font-size: 14px; }
+
+.foot {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
+
+<main class="sheet">
+  <p class="eyebrow">Cybersecurity · Checklist</p>
+  <h1>What to ask about cyber risk</h1>
+  <div class="rule" aria-hidden="true"></div>
+  <p class="lede">An attack moves through three stages. Read left to right: each card is a question to put to the teams and vendors who run your systems, with what a good answer sounds like.</p>
+
+  <div class="grid">
+    <section class="col col-a" aria-labelledby="h-in">
+      <p class="label">Stage 1 · Keep them out</p>
+      <h2 id="h-in">Where could someone <u>get in</u>?</h2>
+      <div class="stack">
+        <article class="card">
+          <span class="chip">1</span>
+          <h3>What is exposed to the internet?</h3>
+          <p><span class="k">Look for</span>A written inventory of VPNs, remote-access tools, admin panels, app servers and test environments, produced within a week.</p>
+        </article>
+        <article class="card">
+          <span class="chip">2</span>
+          <h3>Are VPNs and remote access patched, with MFA?</h3>
+          <p><span class="k">Look for</span>A named owner, patches measured in days, and MFA on every admin and remote login, ideally hardware security keys.</p>
+        </article>
+        <article class="card">
+          <span class="chip">3</span>
+          <h3>Does the server enforce authorization?</h3>
+          <p><span class="k">Look for</span>Every request is checked against the specific record, so one customer can't read another's data (BOLA/IDOR), and someone outside the team has tested it.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="col col-b" aria-labelledby="h-far">
+      <p class="label">Stage 2 · Limit the damage</p>
+      <h2 id="h-far">If they do, how <u>far</u> can they go?</h2>
+      <div class="stack">
+        <article class="card">
+          <span class="chip">4</span>
+          <h3>Why is this data still retained?</h3>
+          <p><span class="k">Look for</span>A retention policy that is enforced, with dormant and cancelled accounts purged or anonymized.</p>
+        </article>
+        <article class="card">
+          <span class="chip">5</span>
+          <h3>Who has privileged access?</h3>
+          <p><span class="k">Look for</span>The company owns the cloud accounts and keys. Vendor logins are named, least-privilege and expiring, with logs the vendor can't erase. Contracts set patch SLAs, audit rights and breach notice.</p>
+        </article>
+        <article class="card">
+          <span class="chip">6</span>
+          <h3>Is access revoked when people leave?</h3>
+          <p><span class="k">Look for</span>Same-day deprovisioning for staff and vendors through SSO, with a quarterly access review.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="col col-c" aria-labelledby="h-rec">
+      <p class="label">Stage 3 · Recover and tell</p>
+      <h2 id="h-rec">Could the company <u>recover</u> and speak up?</h2>
+      <div class="stack">
+        <article class="card">
+          <span class="chip">7</span>
+          <h3>Could the company restore tonight?</h3>
+          <p><span class="k">Look for</span>Immutable backups in a separate account and region (3-2-1 as the baseline), and a restore that has been practiced.</p>
+        </article>
+        <article class="card">
+          <span class="chip">8</span>
+          <h3>Who declares an incident?</h3>
+          <p><span class="k">Look for</span>A named incident owner, a response plan that has been drilled, and legal knows the regulator's reporting deadlines (APPI in Japan).</p>
+        </article>
+        <article class="card">
+          <span class="chip">9</span>
+          <h3>What will customers be told?</h3>
+          <p><span class="k">Look for</span>A public list of what the company never asks for, official channels only, and a way to report phishing and tampered QR codes.</p>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <section class="people" aria-labelledby="h-people">
+    <p class="label">Across all three stages · People</p>
+    <h2 id="h-people">Train for fewer mistakes. Build so each one costs less.</h2>
+    <div class="risks">
+      <article class="risk">
+        <h3>Email links and attachments</h3>
+        <dl>
+          <div class="row"><dt class="t-train">Train</dt><dd>Make reporting a suspicious message easy and blame-free. Run realistic phishing simulations.</dd></div>
+          <div class="row"><dt class="t-build">Build in</dt><dd>Filter mail and sandbox links and attachments. Use phishing-resistant MFA (FIDO2 or passkeys) and least-privilege accounts, so one click can't reach everything.</dd></div>
+        </dl>
+      </article>
+      <article class="risk">
+        <h3>USB and other external devices</h3>
+        <dl>
+          <div class="row"><dt class="t-train">Train</dt><dd>Never plug in a device of unknown origin, including one that was found or handed over.</dd></div>
+          <div class="row"><dt class="t-build">Build in</dt><dd>Use endpoint device control: block USB mass storage by default, allow approved encrypted drives, disable auto-run, and scan with endpoint protection.</dd></div>
+        </dl>
+      </article>
+      <article class="risk">
+        <h3>Unapproved apps and AI tools</h3>
+        <dl>
+          <div class="row"><dt class="t-train">Train</dt><dd>Explain which data must never leave, and make the approved route quick so nobody goes around it.</dd></div>
+          <div class="row"><dt class="t-build">Build in</dt><dd>Discover unsanctioned SaaS and AI tools, put approved ones behind SSO, and apply data loss prevention (DLP) to uploads.</dd></div>
+        </dl>
+      </article>
+    </div>
+    <p class="people-foot">Training reduces how often mistakes happen. Built-in protection limits what one mistake can do. Ask for both.</p>
+  </section>
+
+  <div class="gate">
+    <span class="gate-tag">Before launch</span>
+    <p><strong>Automated checks</strong> on every release, a person's review with evidence for the rest, and <strong>a written executive sign-off</strong> for any exception. Put the cost in the project estimate from day one.</p>
+  </div>
+
+  <p class="foot">A starting point for conversations with technical teams and vendors. The right questions will vary with data sensitivity and how the business runs.</p>
+</main>
+
+</body></html>
